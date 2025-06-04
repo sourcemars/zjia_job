@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简历上传 - ZJia Job</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ZJia Job 简历上传</h1>
+            <p>上传您的简历，开始职业匹配之旅</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                <form id="resumeForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="userId">用户ID (可选):</label>
+                        <input type="number" id="userId" name="userId" placeholder="输入用户ID">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resumeFile">选择简历文件:</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="resumeFile" name="file" accept=".pdf,.doc,.docx,.txt" required>
+                            <div class="file-input-display">
+                                <span class="file-icon">📄</span>
+                                <span class="file-text">点击选择文件或拖拽文件到此处</span>
+                            </div>
+                        </div>
+                        <small class="file-info">支持格式: PDF, DOC, DOCX, TXT (最大 10MB)</small>
+                    </div>
+
+                    <button type="submit" id="uploadBtn" class="upload-btn">
+                        <span class="btn-text">上传简历</span>
+                        <span class="btn-loading" style="display: none;">上传中...</span>
+                    </button>
+                </form>
+
+                <div id="result" class="result-section" style="display: none;">
+                    <div class="result-content">
+                        <div class="result-icon"></div>
+                        <div class="result-message"></div>
+                        <div class="result-details"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-section">
+                <h2>功能特点</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>安全存储</h3>
+                        <p>您的简历信息将被安全加密存储</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>智能匹配</h3>
+                        <p>基于简历内容匹配最适合的职位</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>快速处理</h3>
+                        <p>自动解析简历内容，快速生成匹配结果</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
