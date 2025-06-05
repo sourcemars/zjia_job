@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智佳招聘 - 简历职位匹配系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>智佳招聘</h1>
+            <p class="subtitle">AI驱动的简历职位匹配系统</p>
+        </header>
+
+        <main class="main-content">
+            <section class="upload-section">
+                <div class="upload-card">
+                    <h2>上传简历</h2>
+                    <p class="description">支持 PDF、DOC、DOCX、TXT 格式</p>
+                    
+                    <form id="resumeForm" class="upload-form">
+                        <div class="file-input-wrapper">
+                            <input type="file" id="resumeFile" name="file" accept=".pdf,.doc,.docx,.txt" required>
+                            <label for="resumeFile" class="file-input-label">
+                                <span class="upload-icon">📄</span>
+                                <span class="upload-text">点击选择简历文件</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-options">
+                            <label for="matchLimit">匹配职位数量:</label>
+                            <select id="matchLimit" name="limit">
+                                <option value="5">5个职位</option>
+                                <option value="10" selected>10个职位</option>
+                                <option value="15">15个职位</option>
+                                <option value="20">20个职位</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            <span class="btn-text">开始匹配</span>
+                            <span class="loading-spinner" style="display: none;">⏳</span>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <h2>匹配结果</h2>
+                    <div class="resume-info" id="resumeInfo"></div>
+                </div>
+                
+                <div class="job-matches" id="jobMatches"></div>
+            </section>
+
+            <section class="error-section" id="errorSection" style="display: none;">
+                <div class="error-card">
+                    <h3>处理失败</h3>
+                    <p id="errorMessage"></p>
+                    <button onclick="resetForm()" class="retry-btn">重新尝试</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
