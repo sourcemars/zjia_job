@@ -100,7 +100,7 @@ function displayResults(data) {
                     <div class="match-score">${match.match_percentage}</div>
                 </div>
                 <div class="match-explanation">
-                    ${match.explanation}
+                    ${typeof match.explanation === 'object' ? JSON.stringify(match.explanation, null, 2) : (match.explanation || '暂无详细说明')}
                 </div>
                 ${match.details ? `
                     <div class="match-details">
