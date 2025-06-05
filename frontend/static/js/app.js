@@ -100,12 +100,19 @@ function displayResults(data) {
                     <div class="match-score">${match.match_percentage}</div>
                 </div>
                 <div class="match-explanation">
-                    ${typeof match.explanation === 'object' ? JSON.stringify(match.explanation, null, 2) : (match.explanation || '暂无详细说明')}
+                    ${match.explanation || '暂无详细说明'}
                 </div>
                 ${match.details ? `
                     <div class="match-details">
                         <h4>匹配详情</h4>
-                        <p>${match.details}</p>
+                        <div class="details-content">
+                            ${typeof match.details === 'object' && match.details !== null ? 
+                                Object.entries(match.details).map(([key, value]) => 
+                                    `<p><strong>${key.replace('Rule', '规则')}:</strong> ${value}</p>`
+                                ).join('') : 
+                                `<p>${String(match.details)}</p>`
+                            }
+                        </div>
                     </div>
                 ` : ''}
             </div>
