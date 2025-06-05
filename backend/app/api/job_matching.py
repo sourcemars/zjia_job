@@ -13,11 +13,13 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.services.resume_service import ResumeService
 from app.services.matching_service import JobMatchingService, MatchResult
+from app.services.interview_advice_service import InterviewAdviceService
 from app.models.resume import Resume
 
 router = APIRouter(prefix="/job-matching", tags=["job-matching"])
 resume_service = ResumeService()
 matching_service = JobMatchingService()
+advice_service = InterviewAdviceService()
 
 
 @router.post("/submit-resume", response_model=Dict[str, Any])
@@ -262,3 +264,75 @@ async def quick_resume_match(
     finally:
         if temp_file_path and os.path.exists(temp_file_path):
             os.unlink(temp_file_path)
+
+
+@router.post("/{resume_id}/advice/{job_id}", response_model=Dict[str, Any])
+def generate_interview_advice(
+    resume_id: int,
+    job_id: str,
+    db: Session = Depends(get_db)
+):
+    """
+    Generate interview advice for a specific job match.
+    
+    Args:
+        resume_id: ID of the resume
+        job_id: ID of the job to generate advice for
+        db: Database session
+        
+    Returns:
+        Dictionary containing interview advice
+    """
+    parsed_data = resume_service.get_parsed_resume_data(resume_id, db)
+    if not parsed_data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="简历未找到或无解析数据"
+        )
+    
+    from app.services.job_service import get_job_listing_by_id
+    job = get_job_listing_by_id(db, job_id)
+    if not job:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="职位未找到"
+        )
+    
+    try:
+        matches = matching_service.match_resume_to_jobs(
+            resume_data=parsed_data,
+            db=db,
+            limit=100
+        )
+        
+        target_match = None
+        for match in matches:
+            if match.job_id == job_id:
+                target_match = match
+                break
+        
+        if not target_match:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="该职位与简历匹配度过低"
+            )
+        
+        advice = advice_service.generate_advice(parsed_data, target_match, job)
+        
+        return {
+            "resume_id": resume_id,
+            "job_id": job_id,
+            "match_score": round(target_match.match_score * 100, 1),
+            "advice": {
+                "resume_optimization": advice.resume_optimization,
+                "technical_preparation": advice.technical_preparation,
+                "overall_suggestions": advice.overall_suggestions
+            },
+            "message": "面试建议生成成功"
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"生成面试建议时发生错误: {str(e)}"
+        )
