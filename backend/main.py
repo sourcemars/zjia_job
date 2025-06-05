@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.resume import router as resume_router
+from app.api.job_matching import router as job_matching_router
 
 app = FastAPI(
     title="ZJia Job API",
@@ -21,6 +22,7 @@ app.add_middleware(
 )
 
 app.include_router(resume_router, prefix="/api/v1")
+app.include_router(job_matching_router, prefix="/api/v1")
 
 @app.get("/")
 async def root():

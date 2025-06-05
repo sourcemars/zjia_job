@@ -45,6 +45,9 @@ class ResumeParser:
                 raw_text = self.word_parser.extract_text(str(file_path))
             elif file_extension == '.pdf':
                 raw_text = self.pdf_parser.extract_text(str(file_path))
+            elif file_extension == '.txt':
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    raw_text = f.read()
             else:
                 raise ValueError(f"Unsupported file format: {file_extension}")
             
